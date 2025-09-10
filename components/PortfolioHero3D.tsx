@@ -1,12 +1,17 @@
 "use client";
+
 import Image from "next/image";
 import React, { useMemo, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stars, useTexture, AdaptiveDpr, Preload } from "@react-three/drei";
 import * as THREE from "three";
 
+// Iconos para los botones
+import { FaGithub, FaLinkedin, FaDownload } from "react-icons/fa";
+import { HiOutlineMail } from "react-icons/hi";
+
 /**
- * PortfolioHero3D (optimizado y con título más abajo)
+ * PortfolioHero3D (optimizado + botones con iconos y responsive)
  */
 
 export default function PortfolioHero3D() {
@@ -83,7 +88,7 @@ export default function PortfolioHero3D() {
           }}
         />
 
-        {/* Overlay UI — ahora se ancla arriba con padding para bajar el título */}
+        {/* Overlay UI — título más abajo y botones accesibles */}
         <div className="pointer-events-none absolute inset-x-0 top-0 flex h-full justify-center items-start pt-[18vh] sm:pt-[20vh]">
           <div className="mx-auto max-w-3xl text-center px-6">
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight drop-shadow-[0_0_30px_rgba(83,124,242,.65)]">
@@ -95,45 +100,82 @@ export default function PortfolioHero3D() {
               aplicaciones tanto web como móviles.
             </p>
             <Image
-              src="/dani.jpg"
+              src="/dani.jpg"   // asegúrate de que exista /public/dani.jpg
               alt="Foto de perfil"
               width={200}
               height={200}
               className="mx-auto mt-8 rounded-full border-2 border-white/30 shadow-lg"
+              priority
             />
 
-            {/* Botones */}
-            <div className="mt-6 flex flex-wrap justify-center gap-3 pointer-events-auto z-20">
-              <a
-                href="https://github.com/DPBascur"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2] px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266] active:scale-95 active:shadow-[#537CF299]"
-              >
-                GitHub
-              </a>
-              <a
-                href="https://www.linkedin.com/in/daniel-pe%C3%B1a-0ba014384/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2] px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266] active:scale-95 active:shadow-[#537CF299]"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="mailto:dpbascur.dev@gmail.com
-"
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2] px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266] active:scale-95 active:shadow-[#537CF299]"
-              >
-                dpbascur.dev@gmail.com
-              </a>
-              <a
-                href="/CV_DanielBascur.pdf"
-                download
-                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2] px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266] active:scale-95 active:shadow-[#537CF299]"
-              >
-                Descargar CV
-              </a>
+            {/* Botones (responsivos + iconos + accesibles) */}
+            <div className="mt-6 pointer-events-auto z-20 w-full max-w-2xl mx-auto">
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3">
+                {/* GitHub */}
+                <a
+                  href="https://github.com/DPBascur"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub de Daniel"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2
+                             rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
+                             px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white
+                             shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266]
+                             active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  title="GitHub"
+                >
+                  <FaGithub className="w-5 h-5 shrink-0" aria-hidden />
+                  <span>GitHub</span>
+                </a>
+
+                {/* LinkedIn */}
+                <a
+                  href="https://www.linkedin.com/in/daniel-pe%C3%B1a-0ba014384/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn de Daniel"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2
+                             rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
+                             px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white
+                             shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266]
+                             active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  title="LinkedIn"
+                >
+                  <FaLinkedin className="w-5 h-5 shrink-0" aria-hidden />
+                  <span>LinkedIn</span>
+                </a>
+
+                {/* Email */}
+                <a
+                  href="mailto:dpbascur.dev@gmail.com"
+                  aria-label="Enviar correo a dpbascur.dev@gmail.com"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2
+                             rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
+                             px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white
+                             shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266]
+                             active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  title="Enviar correo"
+                >
+                  <HiOutlineMail className="w-5 h-5 shrink-0" aria-hidden />
+                  <span className="truncate">dpbascur.dev@gmail.com</span>
+                </a>
+
+                {/* Descargar CV */}
+                <a
+                  href="/CV_DanielBascur.pdf"
+                  download
+                  aria-label="Descargar CV"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2
+                             rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
+                             px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white
+                             shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266]
+                             active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  title="Descargar CV"
+                >
+                  <FaDownload className="w-5 h-5 shrink-0" aria-hidden />
+                  <span>Descargar&nbsp;CV</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -166,13 +208,13 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
     []
   );
 
-  const textures = useTexture(urls) as THREE.Texture[];
+  const textures = useTexture(urls) as unknown as THREE.Texture[];
   useEffect(() => {
-    const gl = THREE;
     textures.forEach((t) => {
-      if ("colorSpace" in t) (t as any).colorSpace = (gl as any).SRGBColorSpace;
-      else (t as any).encoding = (gl as any).sRGBEncoding;
-      t.anisotropy = 2;
+      // Color space y filtros
+      if ("colorSpace" in t) (t as any).colorSpace = (THREE as any).SRGBColorSpace;
+      else (t as any).encoding = (THREE as any).sRGBEncoding;
+      t.anisotropy = 4;
       t.minFilter = THREE.LinearMipmapLinearFilter;
       t.magFilter = THREE.LinearFilter;
       t.generateMipmaps = true;
@@ -187,7 +229,7 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
         return {
           tex,
           x: (Math.random() - 0.5) * 14,
-          y: 5 + Math.random() * 3,
+          y: 5 + Math.random() * 3, // spawnea un poco más abajo
           z: Math.random() * -8,
           s: 0.35 + Math.random() * 0.4,
           speed: 0.12 + Math.random() * 0.25,
@@ -253,19 +295,21 @@ function InteractiveLogo({
   scrollRef: React.MutableRefObject<number>;
   activeRef: ActiveRef;
 }) {
-  const group = useRef<THREE.Group>(null!);
+  const group = useRef<THREE.Group | null>(null);
   const hover = useRef(false);
-  const matRef = useRef<THREE.MeshBasicMaterial>(null!);
+  const matRef = useRef<THREE.MeshBasicMaterial | null>(null);
 
+  // Mantener relación de aspecto correcta por textura
   const getAspect = () => {
     const img: any = (texture as any).source?.data ?? (texture as any).image;
     const w = img?.width ?? img?.naturalWidth ?? 1;
     const h = img?.height ?? img?.naturalHeight ?? 1;
     return w && h ? w / h : 1;
-  };
+    };
   const [aspect, setAspect] = useState(1);
   useEffect(() => setAspect(getAspect()), [texture]);
 
+  // Fade-in inicial
   const [visibleTarget, setVisibleTarget] = useState(1);
   useEffect(() => {
     if (matRef.current) matRef.current.opacity = 0.15;
@@ -273,8 +317,7 @@ function InteractiveLogo({
   }, []);
 
   useFrame((state, dt) => {
-    if (!group.current) return;
-    if (!activeRef.current) return;
+    if (!group.current || !activeRef.current) return;
 
     const g = group.current;
     const fall = hover.current ? speed * 0.35 : speed;
