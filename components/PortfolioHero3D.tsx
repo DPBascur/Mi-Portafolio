@@ -5,19 +5,20 @@ import React, { useMemo, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stars, useTexture, AdaptiveDpr, Preload } from "@react-three/drei";
 import * as THREE from "three";
-
-// Iconos para los botones
-import { FaGithub, FaLinkedin, FaDownload } from "react-icons/fa";
-import { HiOutlineMail } from "react-icons/hi";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FiMail, FiDownload } from "react-icons/fi";
 
 /**
- * PortfolioHero3D (optimizado + botones con iconos y responsive)
+ * PortfolioHero3D – Hero con logos cayendo, botones responsivos e íconos
  */
+
+type ActiveRef = React.MutableRefObject<boolean>;
 
 export default function PortfolioHero3D() {
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const activeRef = useRef(true); // pausa animación si no está visible
+  const activeRef = useRef(true);
 
+  // Pausa animación si el hero no está en viewport
   useEffect(() => {
     if (!wrapRef.current) return;
     const obs = new IntersectionObserver(
@@ -34,14 +35,14 @@ export default function PortfolioHero3D() {
         ref={wrapRef}
         className="
           relative mx-1 sm:mx-2 md:mx-3 lg:mx-4
-          h-[86vh] w-auto
+          h-[88vh] min-h-[640px]        /* ⬅️ más alto para que no se corten los botones */
           overflow-hidden
           rounded-b-[72px] md:rounded-b-[96px]
           ring-1 ring-white/5
           bg-[#0B1020] text-white
         "
       >
-        {/* Glows sutiles */}
+        {/* Glows sutiles del fondo */}
         <div
           className="pointer-events-none absolute inset-0 -z-10"
           style={{
@@ -52,6 +53,7 @@ export default function PortfolioHero3D() {
           }}
         />
 
+        {/* Escena 3D */}
         <Canvas
           camera={{ position: [0, 0, 6], fov: 50 }}
           gl={{
@@ -73,7 +75,7 @@ export default function PortfolioHero3D() {
           <LogoRain activeRef={activeRef} />
         </Canvas>
 
-        {/* Aurora */}
+        {/* Aurora inferior */}
         <div
           className="
             pointer-events-none absolute inset-x-0 bottom-0
@@ -88,10 +90,15 @@ export default function PortfolioHero3D() {
           }}
         />
 
-        {/* Overlay UI — título más abajo y botones accesibles */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 flex h-full justify-center items-start pt-[18vh] sm:pt-[20vh]">
-          <div className="mx-auto max-w-3xl text-center px-6">
-            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight drop-shadow-[0_0_30px_rgba(83,124,242,.65)]">
+        {/* Overlay UI */}
+        <div className="
+          pointer-events-none absolute inset-x-0 top-0
+          flex h-full justify-center items-start
+          pt-[18vh] sm:pt-[20vh]
+          pb-[12vh] sm:pb-[14vh]   /* ⬅️ espacio inferior para que no se corten los botones */
+        ">
+          <div className="mx-auto max-w-5xl text-center px-6">
+            <h1 className="text-[clamp(32px,6vw,64px)] font-bold tracking-tight drop-shadow-[0_0_30px_rgba(83,124,242,.65)]">
               DPBascur — UI/UX & Dev
             </h1>
             <p className="mt-4 text-base sm:text-lg text-slate-300/85">
@@ -99,8 +106,9 @@ export default function PortfolioHero3D() {
               Ingeniería Civil en Informática de 4to año, amante de la creación de
               aplicaciones tanto web como móviles.
             </p>
+
             <Image
-              src="/dani.jpg"   // asegúrate de que exista /public/dani.jpg
+              src="/dani.jpg"
               alt="Foto de perfil"
               width={200}
               height={200}
@@ -108,74 +116,84 @@ export default function PortfolioHero3D() {
               priority
             />
 
-            {/* Botones (responsivos + iconos + accesibles) */}
-            <div className="mt-6 pointer-events-auto z-20 w-full max-w-2xl mx-auto">
-              <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3">
-                {/* GitHub */}
-                <a
-                  href="https://github.com/DPBascur"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub de Daniel"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2
-                             rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
-                             px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white
-                             shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266]
-                             active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                  title="GitHub"
-                >
-                  <FaGithub className="w-5 h-5 shrink-0" aria-hidden />
-                  <span>GitHub</span>
-                </a>
+            {/* Botones (responsivos + íconos) */}
+            <div className="mt-6 flex flex-wrap justify-center gap-3 pointer-events-auto z-20">
+              <a
+                href="https://github.com/DPBascur"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  w-full sm:w-auto inline-flex items-center justify-center gap-2
+                  rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
+                  px-4 py-2 sm:px-6 sm:py-3
+                  min-h-[44px] sm:min-h-[48px]
+                  text-sm sm:text-base font-semibold text-white
+                  ring-1 ring-white/10
+                  shadow-lg shadow-[#537CF233]
+                  transition hover:shadow-[#537CF266]
+                  active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60
+                "
+              >
+                <FaGithub className="h-5 w-5" />
+                GitHub
+              </a>
 
-                {/* LinkedIn */}
-                <a
-                  href="https://www.linkedin.com/in/daniel-pe%C3%B1a-0ba014384/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn de Daniel"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2
-                             rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
-                             px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white
-                             shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266]
-                             active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                  title="LinkedIn"
-                >
-                  <FaLinkedin className="w-5 h-5 shrink-0" aria-hidden />
-                  <span>LinkedIn</span>
-                </a>
+              <a
+                href="https://www.linkedin.com/in/daniel-pe%C3%B1a-0ba014384/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  w-full sm:w-auto inline-flex items-center justify-center gap-2
+                  rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
+                  px-4 py-2 sm:px-6 sm:py-3
+                  min-h-[44px] sm:min-h-[48px]
+                  text-sm sm:text-base font-semibold text-white
+                  ring-1 ring-white/10
+                  shadow-lg shadow-[#537CF233]
+                  transition hover:shadow-[#537CF266]
+                  active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60
+                "
+              >
+                <FaLinkedin className="h-5 w-5" />
+                LinkedIn
+              </a>
 
-                {/* Email */}
-                <a
-                  href="mailto:dpbascur.dev@gmail.com"
-                  aria-label="Enviar correo a dpbascur.dev@gmail.com"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2
-                             rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
-                             px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white
-                             shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266]
-                             active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                  title="Enviar correo"
-                >
-                  <HiOutlineMail className="w-5 h-5 shrink-0" aria-hidden />
-                  <span className="truncate">dpbascur.dev@gmail.com</span>
-                </a>
+              <a
+                href="mailto:dpbascur.dev@gmail.com"
+                className="
+                  w-full sm:w-auto inline-flex items-center justify-center gap-2
+                  rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
+                  px-4 py-2 sm:px-6 sm:py-3
+                  min-h-[44px] sm:min-h-[48px]
+                  text-sm sm:text-base font-semibold text-white
+                  ring-1 ring-white/10
+                  shadow-lg shadow-[#537CF233]
+                  transition hover:shadow-[#537CF266]
+                  active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60
+                "
+              >
+                <FiMail className="h-5 w-5" />
+                dpbascur.dev@gmail.com
+              </a>
 
-                {/* Descargar CV */}
-                <a
-                  href="/CV_DanielBascur.pdf"
-                  download
-                  aria-label="Descargar CV"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2
-                             rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
-                             px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white
-                             shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266]
-                             active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                  title="Descargar CV"
-                >
-                  <FaDownload className="w-5 h-5 shrink-0" aria-hidden />
-                  <span>Descargar&nbsp;CV</span>
-                </a>
-              </div>
+              <a
+                href="/CV_DanielBascur.pdf"
+                download
+                className="
+                  w-full sm:w-auto inline-flex items-center justify-center gap-2
+                  rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
+                  px-4 py-2 sm:px-6 sm:py-3
+                  min-h-[44px] sm:min-h-[48px]
+                  text-sm sm:text-base font-semibold text-white
+                  ring-1 ring-white/10
+                  shadow-lg shadow-[#537CF233]
+                  transition hover:shadow-[#537CF266]
+                  active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60
+                "
+              >
+                <FiDownload className="h-5 w-5" />
+                Descargar CV
+              </a>
             </div>
           </div>
         </div>
@@ -184,9 +202,7 @@ export default function PortfolioHero3D() {
   );
 }
 
-/* ------------------------------ Logos ------------------------------ */
-
-type ActiveRef = React.MutableRefObject<boolean>;
+/* ---------------- Logos cayendo (con aspecto correcto y fade-in) ---------------- */
 
 function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
   const urls = useMemo(
@@ -208,13 +224,12 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
     []
   );
 
-  const textures = useTexture(urls) as unknown as THREE.Texture[];
+  const textures = useTexture(urls) as THREE.Texture[];
   useEffect(() => {
     textures.forEach((t) => {
-      // Color space y filtros
       if ("colorSpace" in t) (t as any).colorSpace = (THREE as any).SRGBColorSpace;
       else (t as any).encoding = (THREE as any).sRGBEncoding;
-      t.anisotropy = 4;
+      t.anisotropy = 2;
       t.minFilter = THREE.LinearMipmapLinearFilter;
       t.magFilter = THREE.LinearFilter;
       t.generateMipmaps = true;
@@ -222,6 +237,7 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
     });
   }, [textures]);
 
+  // Spawn un poco más abajo para que aparezcan rápido
   const items = useMemo(
     () =>
       Array.from({ length: 48 }, (_, i) => {
@@ -229,7 +245,7 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
         return {
           tex,
           x: (Math.random() - 0.5) * 14,
-          y: 5 + Math.random() * 3, // spawnea un poco más abajo
+          y: 4 + Math.random() * 2.5, // ⬅️ aparece antes en pantalla
           z: Math.random() * -8,
           s: 0.35 + Math.random() * 0.4,
           speed: 0.12 + Math.random() * 0.25,
@@ -238,6 +254,7 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
     [textures]
   );
 
+  // Inercia por scroll
   const scrollMomentum = useRef(0);
   const lastY = useRef(0);
   useEffect(() => {
@@ -295,17 +312,17 @@ function InteractiveLogo({
   scrollRef: React.MutableRefObject<number>;
   activeRef: ActiveRef;
 }) {
-  const group = useRef<THREE.Group | null>(null);
+  const group = useRef<THREE.Group>(null!);
   const hover = useRef(false);
-  const matRef = useRef<THREE.MeshBasicMaterial | null>(null);
+  const matRef = useRef<THREE.MeshBasicMaterial>(null!);
 
-  // Mantener relación de aspecto correcta por textura
+  // Mantener la proporción del PNG/SVG
   const getAspect = () => {
     const img: any = (texture as any).source?.data ?? (texture as any).image;
     const w = img?.width ?? img?.naturalWidth ?? 1;
     const h = img?.height ?? img?.naturalHeight ?? 1;
     return w && h ? w / h : 1;
-    };
+  };
   const [aspect, setAspect] = useState(1);
   useEffect(() => setAspect(getAspect()), [texture]);
 
@@ -325,16 +342,20 @@ function InteractiveLogo({
     g.position.y -= (fall + scrollRef.current) * dt;
     if (hover.current) g.position.y += 0.25 * dt;
 
+    // deriva horizontal sutil
     g.position.x += Math.sin(state.clock.elapsedTime * 0.2 + g.position.y) * 0.01;
 
+    // hover scale
     const targetScale = hover.current ? 1.25 : 1.0;
     const dampScale = THREE.MathUtils.damp(g.scale.x, targetScale, 8, dt);
     g.scale.setScalar(dampScale);
 
+    // opacidad (fade-in)
     if (matRef.current) {
       matRef.current.opacity = THREE.MathUtils.damp(matRef.current.opacity, visibleTarget, 16, dt);
     }
 
+    // reciclar
     if (g.position.y < -7) {
       g.position.y = 6.5 + Math.random() * 1.5;
       g.position.x = (Math.random() - 0.5) * 14;
@@ -368,7 +389,7 @@ function InteractiveLogo({
           map={texture}
           transparent
           depthWrite={false}
-          alphaTest={0.05}
+          alphaTest={0.05}          /* ⬅️ elimina “cuadros” en PNG */
           side={THREE.DoubleSide}
           toneMapped={false}
           opacity={0.15}
