@@ -95,7 +95,7 @@ export default function PortfolioHero3D() {
               aplicaciones tanto web como móviles.
             </p>
             <Image
-              src="/yo.JPG"
+              src="/dani.jpg"
               alt="Foto de perfil"
               width={200}
               height={200}
