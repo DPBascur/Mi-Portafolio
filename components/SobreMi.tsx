@@ -134,7 +134,7 @@ const SobreMi = () => {
             >
               <div className="relative h-[400px] w-full rounded-2xl overflow-hidden bg-black/20 ring-1 ring-white/10">
                 <Image
-                  src="/dani.jpg"
+                  src="/Dani2.png"
                   alt="Foto de Daniel"
                   fill
                   className="object-cover"
