@@ -13,7 +13,7 @@ import {
 const CONTACT = {
   email: "dpbascur.dev@gmail.com",
   github: "https://github.com/DPBascur",
-  linkedin: "https://www.linkedin.com/in/daniel-pe%C3%B1a-0ba014384/",
+  linkedin: "https://www.linkedin.com/in/daniel-felipe-pe%C3%B1a-bascur-0ba014384/",
   phone: "+56 9 9294 0729", // ← Reemplaza por tu número real
 };
 

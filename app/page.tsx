@@ -126,7 +126,7 @@ export default function Home() {
                           <FaGithub size={20} />
                         </Link>
                         <Link
-                          href="https://linkedin.com/in/dpbascur"
+                          href="https://www.linkedin.com/in/daniel-felipe-pe%C3%B1a-bascur-0ba014384/"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-slate-300 hover:text-white transition-colors"

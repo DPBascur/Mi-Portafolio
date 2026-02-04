@@ -27,6 +27,7 @@ import {
   SiExpo,      // Expo
   SiDjango,    // Django
   SiBlazor,    // ✅ Blazor (faltaba)
+  SiNginx,
 } from "react-icons/si";
 import { TbWind } from "react-icons/tb";
 
@@ -35,7 +36,7 @@ interface Proyecto {
   id: number;
   titulo: string;
   descripcion: string;
-  imagen: string;
+  imagen: string | string[];
   tecnologias: string[];
   githubUrl?: string;
   demoUrl?: string;
@@ -62,17 +63,22 @@ const proyectos: Proyecto[] = [
     imagen: "/InfraCheck.png",
     tecnologias: ["React Native", "TypeScript", "PostgreSQL", "NativeWind", "Docker", "Expo"],
     githubUrl: "https://github.com/Linich14/G3-INFO1173-Infracheck",
-    comingSoon: true,
   },
   {
     id: 3,
-    titulo: "TemuComercio",
+    titulo: "IoT Control Robot",
     descripcion:
-      "Gestión del comercio ambulante: asigna puestos, gestiona permisos, búsqueda de vendedores y panel para fiscalizadores.",
-    imagen: "/TemuComercio.png",
-    tecnologias: ["React Native", "NativeWind", "PostgreSQL", "Blazor", "Tailwind"],
-    githubUrl: "https://github.com/Linich14/TemuComercio-INFO1189-G4",
-    comingSoon: true,
+      "Aplicación web de telemetría y control remoto de robots, diseñada para operar a distancia mediante WebSocket y RTC en tiempo real. Incluye paneles (dashboards) para monitoreo, control y trazabilidad, además de un módulo CRUD para gestión de usuarios y robots con roles, estados y métricas.",
+    imagen: [
+      "/assets/IOT/LoginIOT.png",
+      "/assets/IOT/Dashboard.png",
+      "/assets/IOT/Control.png",
+      "/assets/IOT/Admin.png",
+      "/assets/IOT/Perfil.png",
+    ],
+    tecnologias: ["Nextjs", "Sqlite", "Tailwind", "Docker", "Nginx"],
+    githubUrl: "https://github.com/DPBascur/iot-robot-control",
+    demoUrl: "https://iot.dpbascur.cl",
   },
 ];
 
@@ -85,6 +91,8 @@ const TECH_ICON_MAP: Record<string, IconDef> = {
   React: { Icon: FaReact, color: "text-cyan-400" },
   "React Native": { Icon: FaReact, color: "text-purple-400" },
   "Next.js": { Icon: SiNextdotjs, color: "text-white" },
+  NEXTJS: { Icon: SiNextdotjs, color: "text-white" },
+  Nextjs: { Icon: SiNextdotjs, color: "text-white" },
   TypeScript: { Icon: SiTypescript, color: "text-blue-500" },
   JavaScript: { Icon: FaJs, color: "text-yellow-400" },
   Node: { Icon: FaNodeJs, color: "text-green-500" },
@@ -94,20 +102,112 @@ const TECH_ICON_MAP: Record<string, IconDef> = {
   PostgreSQL: { Icon: SiPostgresql, color: "text-blue-400" },
   Tailwind: { Icon: SiTailwindcss, color: "text-cyan-400" },
   TailwindCSS: { Icon: SiTailwindcss, color: "text-cyan-400" },
+  TAILWIND: { Icon: SiTailwindcss, color: "text-cyan-400" },
   Prisma: { Icon: SiPrisma, color: "text-white" },
   Vite: { Icon: SiVite, color: "text-purple-400" },
   Docker: { Icon: FaDocker, color: "text-blue-400" },
+  DOCKER: { Icon: FaDocker, color: "text-blue-400" },
   Python: { Icon: FaPython, color: "text-yellow-300" },
   HTML: { Icon: FaHtml5, color: "text-orange-500" },
   CSS: { Icon: FaCss3Alt, color: "text-blue-500" },
   Git: { Icon: FaGit, color: "text-red-500" },
   SQLite: { Icon: SiSqlite, color: "text-blue-400" },
   Sql: { Icon: SiSqlite, color: "text-blue-400" },
+  SQLITE: { Icon: SiSqlite, color: "text-blue-400" },
+  Sqlite: { Icon: SiSqlite, color: "text-blue-400" },
   NativeWind: { Icon: TbWind, color: "text-cyan-300" },
   Expo: { Icon: SiExpo, color: "text-white" },
   Django: { Icon: SiDjango, color: "text-green-500" },
   Blazor: { Icon: SiBlazor, color: "text-indigo-300" }, // ✅ nuevo
+  Nginx: { Icon: SiNginx, color: "text-green-500" },
+  NGINX: { Icon: SiNginx, color: "text-green-500" },
 };
+
+function ProjectImage({
+  proyecto,
+  index,
+  isSoon,
+}: {
+  proyecto: Proyecto;
+  index: number;
+  isSoon: boolean;
+}) {
+  const images = Array.isArray(proyecto.imagen) ? proyecto.imagen : [proyecto.imagen];
+  const isCarousel = Array.isArray(proyecto.imagen);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => setActiveIndex(0), [proyecto.titulo]);
+
+  const hasMultiple = images.length > 1;
+  const prev = () => setActiveIndex((i) => (i - 1 + images.length) % images.length);
+  const next = () => setActiveIndex((i) => (i + 1) % images.length);
+
+  useEffect(() => {
+    if (isSoon) return;
+    if (!hasMultiple) return;
+    const id = window.setInterval(() => {
+      setActiveIndex((i) => (i + 1) % images.length);
+    }, 3500);
+    return () => window.clearInterval(id);
+  }, [hasMultiple, images.length, isSoon, proyecto.titulo]);
+
+  return (
+    <div className="relative aspect-[16/10] w-full overflow-hidden">
+      {isSoon && <SoonBadge />}
+
+      <Image
+        src={images[activeIndex]}
+        alt={proyecto.titulo}
+        fill
+        className={[
+          isCarousel
+            ? "object-contain p-4"
+            : "object-cover transition-transform duration-700 group-hover:scale-105",
+          isCarousel ? "bg-black/20" : "",
+          isSoon ? "grayscale opacity-80" : "",
+        ].join(" ")}
+        sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
+        priority={index === 0}
+      />
+
+      {!isSoon && hasMultiple && (
+        <>
+          <button
+            type="button"
+            onClick={prev}
+            aria-label="Imagen anterior"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white ring-1 ring-white/10 opacity-0 group-hover:opacity-100 transition"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={next}
+            aria-label="Imagen siguiente"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/40 text-white ring-1 ring-white/10 opacity-0 group-hover:opacity-100 transition"
+          >
+            ›
+          </button>
+
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 rounded-full bg-black/35 px-2 py-1 ring-1 ring-white/10">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setActiveIndex(i)}
+                aria-label={`Ir a imagen ${i + 1}`}
+                className={[
+                  "h-2 w-2 rounded-full transition",
+                  i === activeIndex ? "bg-white" : "bg-white/40 hover:bg-white/70",
+                ].join(" ")}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 /* ========= Hook: in-view ========= */
 function useInView<T extends Element>(opts?: IntersectionObserverInit) {
@@ -168,6 +268,7 @@ function ProyectoCard({
   const [hover, setHover] = useState(false);
 
   const isSoon = Boolean(proyecto.comingSoon);
+  const hasActions = Boolean(proyecto.githubUrl || proyecto.demoUrl);
 
   return (
     <div
@@ -192,23 +293,11 @@ function ProyectoCard({
         {/* Card */}
         <div className="flex h-full flex-col rounded-[12px] bg-[#0F172A]/75 backdrop-blur-md overflow-hidden">
           {/* Imagen */}
-          <div className="relative aspect-[16/10] w-full overflow-hidden">
-            {isSoon && <SoonBadge />}
+          <div className="relative">
+            <ProjectImage proyecto={proyecto} index={index} isSoon={isSoon} />
 
-            <Image
-              src={proyecto.imagen}
-              alt={proyecto.titulo}
-              fill
-              className={[
-                "object-cover transition-transform duration-700 group-hover:scale-105",
-                isSoon ? "grayscale opacity-80" : "",
-              ].join(" ")}
-              sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
-              priority={index === 0}
-            />
-
-            {/* Overlay acciones (solo si NO es próximamente) */}
-            {!isSoon && (
+            {/* Overlay acciones (solo si NO es próximamente y hay acciones) */}
+            {!isSoon && hasActions && (
               <div
                 className={[
                   "absolute inset-0 flex items-center justify-center gap-4",

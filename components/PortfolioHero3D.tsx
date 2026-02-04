@@ -1,20 +1,18 @@
 "use client";
-
 import Image from "next/image";
 import React, { useMemo, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Stars, useTexture, AdaptiveDpr, Preload } from "@react-three/drei";
 import * as THREE from "three";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { FiMail, FiDownload } from "react-icons/fi";
 
-type ActiveRef = React.MutableRefObject<boolean>;
+/**
+ * PortfolioHero3D (optimizado y con título más abajo)
+ */
 
 export default function PortfolioHero3D() {
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const activeRef = useRef(true);
+  const activeRef = useRef(true); // pausa animación si no está visible
 
-  // Pausar animación si el hero no está visible
   useEffect(() => {
     if (!wrapRef.current) return;
     const obs = new IntersectionObserver(
@@ -31,8 +29,7 @@ export default function PortfolioHero3D() {
         ref={wrapRef}
         className="
           relative mx-1 sm:mx-2 md:mx-3 lg:mx-4
-          h-[92svh] sm:h-[88vh]            /* ⬅️ más alto y con svh para iOS */
-          min-h-[760px] sm:min-h-[640px]   /* ⬅️ asegura espacio en móviles */
+          h-[86vh] w-auto
           overflow-hidden
           rounded-b-[72px] md:rounded-b-[96px]
           ring-1 ring-white/5
@@ -50,7 +47,6 @@ export default function PortfolioHero3D() {
           }}
         />
 
-        {/* Escena 3D */}
         <Canvas
           camera={{ position: [0, 0, 6], fov: 50 }}
           gl={{
@@ -87,62 +83,53 @@ export default function PortfolioHero3D() {
           }}
         />
 
-        {/* Overlay UI */}
-        <div
-          className="
-            pointer-events-none absolute inset-x-0 top-0
-            flex h-full justify-center items-start
-            pt-[16svh] sm:pt-[18vh]
-            pb-28 sm:pb-[12vh]              /* ⬅️ más espacio abajo por si se apilan botones */
-          "
-          style={{
-            // Asegura espacio extra en iPhone con notch
-            paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 112px)",
-          }}
-        >
-          <div className="mx-auto w-full max-w-5xl text-center px-4 sm:px-6">
-            <h1 className="text-[clamp(32px,6vw,64px)] font-bold tracking-tight drop-shadow-[0_0_30px_rgba(83,124,242,.65)]">
+        {/* Overlay UI — ahora se ancla arriba con padding para bajar el título */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 flex h-full justify-center items-start pt-[18vh] sm:pt-[20vh]">
+          <div className="mx-auto max-w-3xl text-center px-6">
+            <h1 className="text-4xl sm:text-6xl font-bold tracking-tight drop-shadow-[0_0_30px_rgba(83,124,242,.65)]">
               DPBascur — UI/UX & Dev
             </h1>
-
-            <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-slate-300/85">
+            <p className="mt-4 text-base sm:text-lg text-slate-300/85">
               React · TypeScript · Python · React Native · Node — Soy un Estudiante de
-              Ingeniería Civil en Informática de 4to año, amante de la creación de
+              Ingeniería Civil en Informática de 5to año, amante de la creación de
               aplicaciones tanto web como móviles.
             </p>
-
-            <Image
-              src="/dani.jpg"
-              alt="Foto de perfil"
-              width={200}
-              height={200}
-              className="mx-auto mt-6 sm:mt-8 rounded-full border-2 border-white/30 shadow-lg"
-              priority
-            />
+            <div className="relative mx-auto mt-8 h-[200px] w-[200px] overflow-hidden rounded-full border-2 border-white/30 shadow-lg">
+              <Image src="/Dani2.png" alt="Foto de perfil" fill className="object-cover" priority />
+            </div>
 
             {/* Botones */}
-            <div className="mt-6 pointer-events-auto z-20">
-              {/* Grid responsiva: 1 col (xs), 2 cols (sm), 4 cols (md+) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto">
-                <ButtonHero href="https://github.com/DPBascur" icon={<FaGithub className="h-5 w-5" />}>
-                  GitHub
-                </ButtonHero>
-
-                <ButtonHero
-                  href="https://www.linkedin.com/in/daniel-pe%C3%B1a-0ba014384/"
-                  icon={<FaLinkedin className="h-5 w-5" />}
-                >
-                  LinkedIn
-                </ButtonHero>
-
-                <ButtonHero href="mailto:dpbascur.dev@gmail.com" icon={<FiMail className="h-5 w-5" />}>
-                  dpbascur.dev@gmail.com
-                </ButtonHero>
-
-                <ButtonHero href="/CV_DanielBascur.pdf" download icon={<FiDownload className="h-5 w-5" />}>
-                  Descargar CV
-                </ButtonHero>
-              </div>
+            <div className="mt-6 flex flex-wrap justify-center gap-3 pointer-events-auto z-20">
+              <a
+                href="https://github.com/DPBascur"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2] px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266] active:scale-95 active:shadow-[#537CF299]"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/daniel-felipe-pe%C3%B1a-bascur-0ba014384/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2] px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266] active:scale-95 active:shadow-[#537CF299]"
+              >
+                LinkedIn
+              </a>
+              <a
+                href="mailto:dpbascur.dev@gmail.com
+"
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2] px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266] active:scale-95 active:shadow-[#537CF299]"
+              >
+                dpbascur.dev@gmail.com
+              </a>
+              <a
+                href="/CV_DanielBascur.pdf"
+                download
+                className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2] px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-[#537CF233] transition hover:shadow-[#537CF266] active:scale-95 active:shadow-[#537CF299]"
+              >
+                Descargar CV
+              </a>
             </div>
           </div>
         </div>
@@ -151,43 +138,10 @@ export default function PortfolioHero3D() {
   );
 }
 
-/** ===================== Botón reutilizable ===================== */
-function ButtonHero({
-  href,
-  children,
-  icon,
-  download,
-}: {
-  href: string;
-  children: React.ReactNode;
-  icon: React.ReactNode;
-  download?: boolean;
-}) {
-  return (
-    <a
-      href={href}
-      {...(download ? { download: true } : {})}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="
-        inline-flex w-full items-center justify-center gap-2
-        rounded-full bg-gradient-to-r from-[#8A5CFF] to-[#537CF2]
-        px-4 py-3
-        min-h-[44px]
-        text-sm sm:text-base font-semibold text-white
-        ring-1 ring-white/10
-        shadow-lg shadow-[#537CF233]
-        transition hover:shadow-[#537CF266]
-        active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60
-      "
-    >
-      {icon}
-      <span className="truncate">{children}</span>
-    </a>
-  );
-}
+/* ------------------------------ Logos ------------------------------ */
 
-/** ============== Logos cayendo (con aspecto correcto y fade-in) ============== */
+type ActiveRef = React.MutableRefObject<boolean>;
+
 function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
   const urls = useMemo(
     () => [
@@ -210,9 +164,10 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
 
   const textures = useTexture(urls) as THREE.Texture[];
   useEffect(() => {
+    const gl = THREE;
     textures.forEach((t) => {
-      if ("colorSpace" in t) (t as any).colorSpace = (THREE as any).SRGBColorSpace;
-      else (t as any).encoding = (THREE as any).sRGBEncoding;
+      if ("colorSpace" in t) (t as any).colorSpace = (gl as any).SRGBColorSpace;
+      else (t as any).encoding = (gl as any).sRGBEncoding;
       t.anisotropy = 2;
       t.minFilter = THREE.LinearMipmapLinearFilter;
       t.magFilter = THREE.LinearFilter;
@@ -221,7 +176,6 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
     });
   }, [textures]);
 
-  // Spawn más bajo para aparecer rápido
   const items = useMemo(
     () =>
       Array.from({ length: 48 }, (_, i) => {
@@ -229,7 +183,7 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
         return {
           tex,
           x: (Math.random() - 0.5) * 14,
-          y: 4 + Math.random() * 2.5,
+          y: 5 + Math.random() * 3,
           z: Math.random() * -8,
           s: 0.35 + Math.random() * 0.4,
           speed: 0.12 + Math.random() * 0.25,
@@ -238,7 +192,6 @@ function LogoRain({ activeRef }: { activeRef: ActiveRef }) {
     [textures]
   );
 
-  // Inercia por scroll
   const scrollMomentum = useRef(0);
   const lastY = useRef(0);
   useEffect(() => {
@@ -300,7 +253,6 @@ function InteractiveLogo({
   const hover = useRef(false);
   const matRef = useRef<THREE.MeshBasicMaterial>(null!);
 
-  // Mantener proporción del PNG/SVG
   const getAspect = () => {
     const img: any = (texture as any).source?.data ?? (texture as any).image;
     const w = img?.width ?? img?.naturalWidth ?? 1;
@@ -310,7 +262,6 @@ function InteractiveLogo({
   const [aspect, setAspect] = useState(1);
   useEffect(() => setAspect(getAspect()), [texture]);
 
-  // Fade-in inicial
   const [visibleTarget, setVisibleTarget] = useState(1);
   useEffect(() => {
     if (matRef.current) matRef.current.opacity = 0.15;
@@ -318,7 +269,8 @@ function InteractiveLogo({
   }, []);
 
   useFrame((state, dt) => {
-    if (!group.current || !activeRef.current) return;
+    if (!group.current) return;
+    if (!activeRef.current) return;
 
     const g = group.current;
     const fall = hover.current ? speed * 0.35 : speed;
@@ -369,7 +321,7 @@ function InteractiveLogo({
           map={texture}
           transparent
           depthWrite={false}
-          alphaTest={0.05}     
+          alphaTest={0.05}
           side={THREE.DoubleSide}
           toneMapped={false}
           opacity={0.15}

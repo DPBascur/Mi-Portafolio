@@ -165,7 +165,7 @@ export default function Navbar() {
                 <FaGithub className="h-5 w-5" />
               </a>
               <a
-                href="https://www.linkedin.com/in/daniel-pe%C3%B1a-0ba014384/"
+                href="https://www.linkedin.com/in/daniel-felipe-pe%C3%B1a-bascur-0ba014384/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/15 transition"
@@ -237,7 +237,7 @@ export default function Navbar() {
                   GitHub
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/daniel-pe%C3%B1a-0ba014384/"
+                  href="https://www.linkedin.com/in/daniel-felipe-pe%C3%B1a-bascur-0ba014384/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-white/10 text-white py-2 hover:bg-white/15 transition"
