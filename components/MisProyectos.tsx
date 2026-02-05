@@ -40,8 +40,10 @@ interface Proyecto {
   tecnologias: string[];
   githubUrl?: string;
   demoUrl?: string;
-  /** Si es true, la tarjeta se muestra como Próximamente (deshabilita acciones) */
+  /** Si es true, la tarjeta se muestra como Próximamente */
   comingSoon?: boolean;
+  /** Por defecto, si comingSoon=true se bloquean acciones. Setea false para permitir demo/repositorio. */
+  lockActions?: boolean;
 }
 
 /* ========= Data de ejemplo ========= */
@@ -79,6 +81,8 @@ const proyectos: Proyecto[] = [
     tecnologias: ["Nextjs", "Sqlite", "Tailwind", "Docker", "Nginx"],
     githubUrl: "https://github.com/DPBascur/iot-robot-control",
     demoUrl: "https://iot.dpbascur.cl",
+    comingSoon: true,
+    lockActions: false,
   },
 ];
 
@@ -126,11 +130,13 @@ const TECH_ICON_MAP: Record<string, IconDef> = {
 function ProjectImage({
   proyecto,
   index,
-  isSoon,
+  showSoon,
+  disableInteractions,
 }: {
   proyecto: Proyecto;
   index: number;
-  isSoon: boolean;
+  showSoon: boolean;
+  disableInteractions: boolean;
 }) {
   const images = Array.isArray(proyecto.imagen) ? proyecto.imagen : [proyecto.imagen];
   const isCarousel = Array.isArray(proyecto.imagen);
@@ -143,17 +149,17 @@ function ProjectImage({
   const next = () => setActiveIndex((i) => (i + 1) % images.length);
 
   useEffect(() => {
-    if (isSoon) return;
+    if (disableInteractions) return;
     if (!hasMultiple) return;
     const id = window.setInterval(() => {
       setActiveIndex((i) => (i + 1) % images.length);
     }, 3500);
     return () => window.clearInterval(id);
-  }, [hasMultiple, images.length, isSoon, proyecto.titulo]);
+  }, [hasMultiple, images.length, disableInteractions, proyecto.titulo]);
 
   return (
     <div className="relative aspect-[16/10] w-full overflow-hidden">
-      {isSoon && <SoonBadge />}
+      {showSoon && <SoonBadge />}
 
       <Image
         src={images[activeIndex]}
@@ -164,13 +170,13 @@ function ProjectImage({
             ? "object-contain p-4"
             : "object-cover transition-transform duration-700 group-hover:scale-105",
           isCarousel ? "bg-black/20" : "",
-          isSoon ? "grayscale opacity-80" : "",
+          showSoon ? "grayscale opacity-80" : "",
         ].join(" ")}
         sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
         priority={index === 0}
       />
 
-      {!isSoon && hasMultiple && (
+      {!disableInteractions && hasMultiple && (
         <>
           <button
             type="button"
@@ -267,7 +273,8 @@ function ProyectoCard({
   const { ref, visible } = useInView<HTMLDivElement>();
   const [hover, setHover] = useState(false);
 
-  const isSoon = Boolean(proyecto.comingSoon);
+  const showSoon = Boolean(proyecto.comingSoon);
+  const lockActions = showSoon && proyecto.lockActions !== false;
   const hasActions = Boolean(proyecto.githubUrl || proyecto.demoUrl);
 
   return (
@@ -276,11 +283,11 @@ function ProyectoCard({
       className={[
         "group relative h-full transition-all duration-700",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
-        isSoon ? "cursor-not-allowed" : "",
+        lockActions ? "cursor-not-allowed" : "",
       ].join(" ")}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      aria-disabled={isSoon}
+      aria-disabled={lockActions}
     >
       {/* Borde gradiente */}
       <div
@@ -294,10 +301,15 @@ function ProyectoCard({
         <div className="flex h-full flex-col rounded-[12px] bg-[#0F172A]/75 backdrop-blur-md overflow-hidden">
           {/* Imagen */}
           <div className="relative">
-            <ProjectImage proyecto={proyecto} index={index} isSoon={isSoon} />
+            <ProjectImage
+              proyecto={proyecto}
+              index={index}
+              showSoon={showSoon}
+              disableInteractions={lockActions}
+            />
 
             {/* Overlay acciones (solo si NO es próximamente y hay acciones) */}
-            {!isSoon && hasActions && (
+            {!lockActions && hasActions && (
               <div
                 className={[
                   "absolute inset-0 flex items-center justify-center gap-4",
@@ -351,7 +363,7 @@ function ProyectoCard({
 
             {/* Acciones móviles */}
             <div className="mt-4 flex gap-3 md:hidden">
-              {isSoon ? (
+              {lockActions ? (
                 <span
                   className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold text-white"
                   style={{
@@ -396,7 +408,7 @@ function ProyectoCard({
           </div>
 
           {/* Capa bloqueadora para evitar clicks si es próximamente (desktop) */}
-          {isSoon && <div className="absolute inset-0 pointer-events-auto" />}
+          {lockActions && <div className="absolute inset-0 pointer-events-auto" />}
         </div>
       </div>
     </div>

@@ -2,23 +2,83 @@
 
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import { FaJs, FaReact, FaPython, FaGit, FaNodeJs } from "react-icons/fa";
-import { SiTypescript, SiNextdotjs, SiPostgresql, SiLatex } from "react-icons/si";
+import { FaCss3Alt, FaDocker, FaFileExcel, FaGit, FaHtml5, FaJs, FaNodeJs, FaReact } from "react-icons/fa";
+import { TbApi, TbPlugConnected } from "react-icons/tb";
+import {
+  SiDjango,
+  SiExpo,
+  SiGithub,
+  SiLatex,
+  SiLinux,
+  SiNginx,
+  SiNextdotjs,
+  SiPostgresql,
+  SiSap,
+  SiSqlite,
+  SiTailwindcss,
+  SiTypescript,
+} from "react-icons/si";
 
 /* ===== data ===== */
 type Skill = { name: string; Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; color: string };
-const skills: Skill[] = [
-  { name: "JavaScript", Icon: FaJs, color: "text-yellow-400" },
-  { name: "TypeScript", Icon: SiTypescript, color: "text-blue-500" },
-  { name: "React", Icon: FaReact, color: "text-cyan-400" },
-  { name: "React Native", Icon: FaReact, color: "text-purple-400" },
-  { name: "Next.js", Icon: SiNextdotjs, color: "text-white" },
-  { name: "Node.js", Icon: FaNodeJs, color: "text-green-500" },
-  { name: "Python", Icon: FaPython, color: "text-yellow-300" },
-  { name: "SQL", Icon: SiPostgresql, color: "text-blue-400" },
-  { name: "Git", Icon: FaGit, color: "text-red-500" },
-  // ✅ Nuevo
-  { name: "LaTeX", Icon: SiLatex, color: "text-emerald-400" },
+type SkillGroup = { title: string; items: Skill[] };
+const skillGroups: SkillGroup[] = [
+  {
+    title: "Front-End",
+    items: [
+      { name: "React", Icon: FaReact, color: "text-cyan-400" },
+      { name: "Next.js", Icon: SiNextdotjs, color: "text-white" },
+      { name: "TypeScript", Icon: SiTypescript, color: "text-blue-500" },
+      { name: "JavaScript", Icon: FaJs, color: "text-yellow-400" },
+      { name: "Tailwind CSS", Icon: SiTailwindcss, color: "text-sky-400" },
+      { name: "NativeWind", Icon: SiTailwindcss, color: "text-sky-300" },
+      { name: "HTML5", Icon: FaHtml5, color: "text-orange-500" },
+      { name: "CSS3", Icon: FaCss3Alt, color: "text-blue-500" },
+      { name: "UI/UX (usabilidad)", Icon: FaReact, color: "text-pink-300" },
+    ],
+  },
+  {
+    title: "Mobile",
+    items: [
+      { name: "React Native", Icon: FaReact, color: "text-purple-400" },
+      { name: "Expo", Icon: SiExpo, color: "text-gray-200" },
+    ],
+  },
+  {
+    title: "Back-End",
+    items: [
+      { name: "Node.js", Icon: FaNodeJs, color: "text-green-500" },
+      { name: "Django", Icon: SiDjango, color: "text-emerald-300" },
+      { name: "APIs REST", Icon: TbApi, color: "text-indigo-300" },
+      { name: "WebSockets (básico)", Icon: TbPlugConnected, color: "text-indigo-200" },
+    ],
+  },
+  {
+    title: "Bases de Datos",
+    items: [
+      { name: "SQLite", Icon: SiSqlite, color: "text-blue-300" },
+      { name: "PostgreSQL", Icon: SiPostgresql, color: "text-blue-400" },
+      { name: "SQL", Icon: SiPostgresql, color: "text-blue-200" },
+    ],
+  },
+  {
+    title: "DevOps / Infraestructura",
+    items: [
+      { name: "Docker", Icon: FaDocker, color: "text-sky-400" },
+      { name: "Nginx", Icon: SiNginx, color: "text-green-400" },
+      { name: "Linux (VPS)", Icon: SiLinux, color: "text-yellow-200" },
+      { name: "Git", Icon: FaGit, color: "text-red-500" },
+      { name: "GitHub", Icon: SiGithub, color: "text-gray-200" },
+    ],
+  },
+  {
+    title: "Herramientas y otros",
+    items: [
+      { name: "Excel (avanzado)", Icon: FaFileExcel, color: "text-green-400" },
+      { name: "SAP", Icon: SiSap, color: "text-sky-200" },
+      { name: "LaTeX", Icon: SiLatex, color: "text-emerald-400" },
+    ],
+  },
 ];
 
 /* ===== hook in-view ===== */
@@ -42,6 +102,8 @@ const SobreMi = () => {
   const title = useInView<HTMLHeadingElement>();
   const p1 = useInView<HTMLParagraphElement>();
   const p2 = useInView<HTMLParagraphElement>();
+  const p3 = useInView<HTMLParagraphElement>();
+  const p4 = useInView<HTMLParagraphElement>();
   const skillsWrap = useInView<HTMLDivElement>();
   const imageWrap = useInView<HTMLDivElement>();
 
@@ -69,8 +131,9 @@ const SobreMi = () => {
                 p1.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
               ].join(" ")}
             >
-              Soy un desarrollador Full Stack orientado al Front-End. Trabajo en el desarrollo web y aplicaciones móviles, utilizando
-              tecnologías modernas como React, React Native, Next.js y Node.js, entre otras.
+              Soy desarrollador Full Stack con orientación al Front-End, actualmente en la etapa final de la carrera de Ingeniería Civil en
+              Informática. Me enfoco en el desarrollo de aplicaciones web y móviles, cuidando tanto la experiencia de usuario como la
+              estructura y mantenibilidad del código.
             </p>
 
             <p
@@ -80,30 +143,67 @@ const SobreMi = () => {
                 p2.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
               ].join(" ")}
             >
-              He trabajado en proyectos diversos, desde plataformas web hasta apps móviles. Me enfoco
-              en crear experiencias atractivas para las personas, siempre cuidando la usabilidad y el
-              detalle visual.
+              He participado en proyectos académicos y reales que incluyen plataformas web, aplicaciones móviles y sistemas de gestión,
+              integrando funcionalidades como autenticación, roles de usuario, dashboards, consumo de APIs y manejo de bases de datos.
+            </p>
+
+            <p
+              ref={p3.ref}
+              className={[
+                "text-gray-300 leading-relaxed transition-all duration-700 delay-300",
+                p3.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+              ].join(" ")}
+            >
+              Durante mi práctica profesional he podido trabajar con procesos empresariales reales, lo que me permitió entender la
+              importancia de la eficiencia, la automatización y la seguridad en sistemas utilizados diariamente por usuarios no técnicos.
+            </p>
+
+            <p
+              ref={p4.ref}
+              className={[
+                "text-gray-300 leading-relaxed transition-all duration-700 delay-400",
+                p4.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+              ].join(" ")}
+            >
+              Actualmente me encuentro fortaleciendo mis conocimientos en buenas prácticas de desarrollo, arquitectura de software y
+              seguridad de aplicaciones, con el objetivo de crear soluciones confiables, claras y preparadas para entornos productivos.
             </p>
 
             {/* Skills */}
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold text-white">Habilidades Técnicas</h3>
-              <div ref={skillsWrap.ref} className="flex flex-wrap gap-3">
-                {skills.map(({ name, Icon, color }, i) => (
-                  <span
-                    key={name}
-                    style={{ transitionDelay: `${skillsWrap.visible ? 60 * i : 0}ms` }}
-                    className={[
-                      "bg-[#1E293B] text-white px-4 py-2 rounded-full text-sm flex items-center gap-2",
-                      "transition-all duration-500 hover:bg-[#2E3B4B] hover:-translate-y-0.5",
-                      skillsWrap.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
-                      "shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_6px_20px_rgba(83,124,242,.25)]",
-                    ].join(" ")}
-                  >
-                    <Icon className={["h-4 w-4", color].join(" ")} />
-                    {name}
-                  </span>
-                ))}
+              <div ref={skillsWrap.ref} className="space-y-5">
+                {skillGroups.map((group, groupIndex) => {
+                  const offset = skillGroups
+                    .slice(0, groupIndex)
+                    .reduce((acc, g) => acc + g.items.length, 0);
+
+                  return (
+                    <div key={group.title} className="space-y-2">
+                      <h4 className="text-sm font-semibold text-gray-200 tracking-wide">{group.title}</h4>
+                      <div className="flex flex-wrap gap-3">
+                        {group.items.map(({ name, Icon, color }, itemIndex) => {
+                          const i = offset + itemIndex;
+                          return (
+                            <span
+                              key={name}
+                              style={{ transitionDelay: `${skillsWrap.visible ? 60 * i : 0}ms` }}
+                              className={[
+                                "bg-[#1E293B] text-white px-4 py-2 rounded-full text-sm flex items-center gap-2",
+                                "transition-all duration-500 hover:bg-[#2E3B4B] hover:-translate-y-0.5",
+                                skillsWrap.visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+                                "shadow-[0_0_0_0_rgba(0,0,0,0)] hover:shadow-[0_6px_20px_rgba(83,124,242,.25)]",
+                              ].join(" ")}
+                            >
+                              <Icon className={["h-4 w-4", color].join(" ")} />
+                              {name}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

@@ -138,6 +138,7 @@ export default function Home() {
 
                       <a
                         href="/CV_DanielBascur.pdf"
+                        download="CV_DanielBascur.pdf"
                         className="inline-flex mt-3 rounded-full px-4 py-2 text-sm font-semibold text-white shadow-lg active:scale-95"
                         style={{
                           background:
